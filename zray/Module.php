@@ -12,7 +12,7 @@ class Module extends \ZRay\ZRayModule {
             ),
             // Prevent those default panels from being displayed
             'defaultPanels' => array(
-                'unirest' => false,
+                'Requests' => false,
             ),
             // configure all custom panels
             'panels' => array(

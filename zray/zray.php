@@ -20,7 +20,7 @@ $zre->traceFunction('Unirest::request', function($context, &$storage){}, functio
 		$resultCode = $result->code;
 	}
 
-    $storage['BackendApi'][] = array(
+    $storage['Requests'][] = array(
 		'method' => $context['functionArgs'][0],
 		'url' => $context['functionArgs'][1],
 		'requestHeaders' => $context['functionArgs'][3],

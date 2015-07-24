@@ -1,42 +1,17 @@
-<div class="zdb-toolbar-entry zsb-unirest-requests-details" data-name="unirest-requests">
-    <div class="zdb-toolbar-preview" title="Database Queries">
-        <div class="zdb-toolbar-icon"></div>
-        <span class="zdb-toolbar-info">&nbsp;</span>
-    </div>
-    <div class="zdb-toolbar-detail zdb-unirest-requests-detail-wrapper">
-        <div class="zdb-row zdb-toolbar-detail-header">
-            <div class="zdb-col-1-narrow">
-                <h1>UniRest Requests</h1>
-            </div>
-            <div class="zdb-col-3-wide">
-                <div class="zdb-pull-right">
-                    <ul class="zdb-toolbar-items zdb-horizontal">
-                        <li>
-                            <span class="zdb-expand-all hidden" onclick="zendDevBar.expandTableRows(this, '.zsb-unirest-requests-panel')">Expand all</span>
-                        </li>
-                        <li class="zdb-toolbar-filter">
-                            <label for="zdb-toolbar-input-filter-text">Filter by</label>
-                            <select>
-                                <option value="">Parameter</option>
-                            </select>
-                            <input type="text" name="zdb-toolbar-input-filter-text" id="zdb-toolbar-input-filter-text" size="6" class="zdb-toolbar-input zdb-toolbar-input-filter-parameter" />
-                        </li>
-                        <li>
-                            <div class="zdb-export-results-btn" title="Show Report"></div>
-                        </li>
-                        <li class="zdb-toolbar-pin">
-                            <div class="zdb-popup-pin" onclick="zendDevBar.unpin()"></div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-        <div class="zdb-row zdb-panel zsb-unirest-requests-panel">
-            <!-- main panel: unirest-requests -->
-            <div class="zdb-col-4-wide zdb-entries-table-wrapper zdb-adaptive-height zsb-unirest-requests-table-wrapper"></div>
-        </div>
-    </div>
+<?php
+$tableParams = array(
+    'tableId' 			=> 'unirest-requests',
+    'tableWidth'        => '4',
+);
+?>
+
+
+<div>
+
+    <?php echo $this->zrayTable($tableParams) ?>
+
 </div>
+
 <script type="text/javascript">
     (function() {
         $zendDevBar(function() {
@@ -45,7 +20,7 @@
                 storage.setData(extensionData);
             });
             // create main table
-            var mainTable = zendDevBar.createTable(storage, $zendDevBar('.zsb-unirest-requests-table-wrapper'));
+            var mainTable = zendDevBar.createTable(storage, jQuery('#<?php echo $tableParams['tableId']; ?>'));
             mainTable.setColumns([
                 {
                     "label": "Method",
@@ -99,7 +74,8 @@
 
 
         function showBacktrace(id, data) {
-            var overlay = zendDevBar.getModuleOverlay('unirest-requests');
+            var overlay = zendDevBar.getModuleOverlay('zrayExtension:unirest/unirestApiTable');
+            console.log(overlay);
             var spinner = $zendDevBar('<div class="zdb-overlay-spinner" style="height: ' + (overlay.outerHeight() - 30) + 'px; line-height: ' + (overlay.outerHeight() - 30) + 'px"><div><div class="zdb-spinner-img"></div>Loading...</div></div>');
             overlay.append(spinner);
             spinner.remove();
