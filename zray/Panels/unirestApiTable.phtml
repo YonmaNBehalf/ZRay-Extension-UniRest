@@ -1,0 +1,151 @@
+<div class="zdb-toolbar-entry zsb-unirest-requests-details" data-name="unirest-requests">
+    <div class="zdb-toolbar-preview" title="Database Queries">
+        <div class="zdb-toolbar-icon"></div>
+        <span class="zdb-toolbar-info">&nbsp;</span>
+    </div>
+    <div class="zdb-toolbar-detail zdb-unirest-requests-detail-wrapper">
+        <div class="zdb-row zdb-toolbar-detail-header">
+            <div class="zdb-col-1-narrow">
+                <h1>UniRest Requests</h1>
+            </div>
+            <div class="zdb-col-3-wide">
+                <div class="zdb-pull-right">
+                    <ul class="zdb-toolbar-items zdb-horizontal">
+                        <li>
+                            <span class="zdb-expand-all hidden" onclick="zendDevBar.expandTableRows(this, '.zsb-unirest-requests-panel')">Expand all</span>
+                        </li>
+                        <li class="zdb-toolbar-filter">
+                            <label for="zdb-toolbar-input-filter-text">Filter by</label>
+                            <select>
+                                <option value="">Parameter</option>
+                            </select>
+                            <input type="text" name="zdb-toolbar-input-filter-text" id="zdb-toolbar-input-filter-text" size="6" class="zdb-toolbar-input zdb-toolbar-input-filter-parameter" />
+                        </li>
+                        <li>
+                            <div class="zdb-export-results-btn" title="Show Report"></div>
+                        </li>
+                        <li class="zdb-toolbar-pin">
+                            <div class="zdb-popup-pin" onclick="zendDevBar.unpin()"></div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="zdb-row zdb-panel zsb-unirest-requests-panel">
+            <!-- main panel: unirest-requests -->
+            <div class="zdb-col-4-wide zdb-entries-table-wrapper zdb-adaptive-height zsb-unirest-requests-table-wrapper"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    (function() {
+        $zendDevBar(function() {
+            var storage = zendDevBar.getStorage('unirestRequestsTable');
+            zray.registerDataHandler('unirest', 'Requests', function(extensionData, requestData) {
+                storage.setData(extensionData);
+            });
+            // create main table
+            var mainTable = zendDevBar.createTable(storage, $zendDevBar('.zsb-unirest-requests-table-wrapper'));
+            mainTable.setColumns([
+                {
+                    "label": "Method",
+                    "propertyName": "method",
+                    "sortable": true,
+                    "width": '5%',
+                    "getHtml": function(value, record) {
+                        var resultCode=record.responseCode;
+                        if( resultCode == "200" ){
+                            resultCodeColor = "green";
+                        }else{
+                            resultCodeColor = "red";
+                        }
+                        return ' <b>' + value + '</b>, (<span style="color:' + resultCodeColor + ';">' + resultCode + '</span>)';
+                    }
+                },
+                {
+                    "label": "URL",
+                    "propertyName": "url",
+                    "sortable": true,
+                    "width": '25%',
+                    "getHtml": function(value, record) {
+                        return ' <b>' + value + '</b>';
+                    }
+                },
+                {
+                    "label": "Response",
+                    "propertyName": "responseRawBody",
+                    "sortable": true,
+                    "width": '55%',
+                    "getHtml": function(value, record) {
+                        return   zendDevBar.shorten(value, 250) ;
+                    }
+                },
+                {
+                    label: 'Actions',
+                    tooltip: 'UniRest Requests actions',
+                    propertyName: 'backtraceId',
+                    width: '5%',
+                    getHtml: function (value, record) {
+                        var elem = $zendDevBar('<div class="zdb-table-action zdb-ta-backtrace" title="Show backtrace"></div>');
+                        elem.click(function () {
+                            showBacktrace(value, record);
+                        });
+                        return elem;
+                    }
+                }
+            ]);
+
+        });
+
+
+        function showBacktrace(id, data) {
+            var overlay = zendDevBar.getModuleOverlay('unirest-requests');
+            var spinner = $zendDevBar('<div class="zdb-overlay-spinner" style="height: ' + (overlay.outerHeight() - 30) + 'px; line-height: ' + (overlay.outerHeight() - 30) + 'px"><div><div class="zdb-spinner-img"></div>Loading...</div></div>');
+            overlay.append(spinner);
+            spinner.remove();
+            shortFileName = zendDevBar.shorten(data.url, 100);
+            var resultCode=data.responseCode;
+            if( resultCode == "200" ){
+                resultCodeColor = "green";
+            }else{
+                resultCodeColor = "red";
+            }
+            requestHeadline = ' <b>' + data.method + '</b>, (<span style="color:' + resultCodeColor + ';">' + resultCode + '</span>)';
+            overlay.append('\
+                <div class="zdb-row zdb-toolbar-detail-header">\
+                    <div class="zdb-col-4">\
+                        <h1><a href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'unirest\')">' + requestHeadline + '</a> <span style="font-size: 14px;color: #006F9D;">&raquo ' + shortFileName + '</span></h1>\
+                        <div class="zdb-pull-right">\
+                            <ul class="zdb-toolbar-items zdb-horizontal">\
+                                <li><a class="zdb-backtrace-back" href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'unirest-requests\')">back</a></li>\
+                                <li><div class="zdb-export-results-btn zdb-export-backtrace-btn" title="Export backtrace"></div></li>\
+                            </ul>\
+                        </div>\
+                    </div>\
+                <div class="zdb-row zdb-panel zsb-logs-backtrace-panel">\
+                    <div class="zdb-col-4 zdb-entries-table-wrapper zdb-adaptive-height zsb-overlay-backtrace-table-wrapper-unirest-requests"></div>\
+                    <div class="hidden zdb-unirest-requests-backtrace-full-data"></div>\
+                </div>\
+            ');
+
+            var backtraceTable = createBacktrace(data, false);
+
+            overlay.find('.zdb-export-backtrace-btn').on('click', function() {
+                backtraceTable = createBacktrace(data, true);
+                backtraceTable.exportResults('Query Backtrace<br><small style="font-size:14px; color: #888;">'+data.string+'</small>');
+            });
+            overlay.find('.zdb-adaptive-height').css('height', zendDevBar.cookieParams.height - 50);
+        }
+
+        function createBacktrace(backtrace, displayFullData) {
+            var storage = zendDevBar.getStorage('unirestRequestsFullDataTable');
+            storage.reset();
+            storage.setLimit(-1);
+            storage.addData(backtrace);
+            // create main table
+            var tableContainer = displayFullData ? $zendDevBar('.zdb-unirest-requests-backtrace-full-data') : $zendDevBar('.zsb-overlay-backtrace-table-wrapper-unirest-requests');
+            var mainTable = zray.createTreeTable(storage, tableContainer);
+            return mainTable;
+        }
+    })();
+</script>
