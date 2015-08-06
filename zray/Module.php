@@ -19,9 +19,9 @@ class Module extends \ZRay\ZRayModule {
                 'unirestApiTable' => array(
                     'display'           => true,
                     'menuTitle'         => 'UniRest Requests',
-                    'panelTitle'    => 'UniRest Requests',
-                    'searchId'  => 'unirest-backend-api-table-search',
-                    'pagerId'       => 'unirest-backend-api-table-pager',
+                    'panelTitle'        => 'UniRest Requests',
+                    'searchId'          => 'unirest-table-search',
+                    'pagerId'           => 'unirest-table-pager',
                 )
             )
         );

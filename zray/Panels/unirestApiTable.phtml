@@ -2,6 +2,8 @@
 $tableParams = array(
     'tableId' 			=> 'unirest-requests',
     'tableWidth'        => '4',
+    'searchId'          => 'unirest-table-search',
+    'pagerId'           => 'unirest-table-pager',
 );
 ?>
 
@@ -16,7 +18,7 @@ $tableParams = array(
     (function() {
         $zendDevBar(function() {
             var storage = zendDevBar.getStorage('unirestRequestsTable');
-            zray.registerDataHandler('unirest', 'Requests', function(extensionData, requestData) {
+            zray.registerDataHandler('unirest', 'Requests', function(extensionData) {
                 storage.setData(extensionData);
             });
             // create main table
@@ -70,8 +72,16 @@ $tableParams = array(
                 }
             ]);
 
-        });
+            // create pager
+            zray.createPager(storage,
+                jQuery('#<?php echo $tableParams['pagerId']; ?>'));
 
+
+            // create search
+            zray.createSearch(storage,
+                jQuery('#<?php echo $tableParams['searchId']; ?>'), mainTable);
+
+        });
 
         function showBacktrace(data) {
             var overlay = zendDevBar.getModuleOverlay('zrayExtension:unirest/unirestApiTable');
