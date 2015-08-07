@@ -29,6 +29,8 @@ $zre->traceFunction('Unirest::request', function($context, &$storage){}, functio
 		'responseHeaders' => $resultHeaders,
 		'responsePayload' => $resultBody,
 		'responseCode' => $resultCode,
+        'duration' => $context['durationInclusive']
+
     );
 
 });
