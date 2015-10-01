@@ -18,7 +18,7 @@ $tableParams = array(
     (function() {
         $zendDevBar(function() {
             var storage = zendDevBar.getStorage('unirestRequestsTable');
-            zray.registerDataHandler('unirest', 'Requests', function(extensionData) {
+            zray.registerDataHandler('Requests', 'UniRest', function(extensionData) {
                 storage.setData(extensionData);
             });
             // create main table
@@ -94,7 +94,7 @@ $tableParams = array(
         });
 
         function showBacktrace(data) {
-            var overlay = zendDevBar.getModuleOverlay('zrayExtension:unirest/unirestApiTable');
+            var overlay = zendDevBar.getModuleOverlay('zrayExtension:Requests/unirestApiTable');
             console.log(overlay);
             var spinner = $zendDevBar('<div class="zdb-overlay-spinner" style="height: ' + (overlay.outerHeight() - 30) + 'px; line-height: ' + (overlay.outerHeight() - 30) + 'px"><div><div class="zdb-spinner-img"></div>Loading...</div></div>');
             overlay.append(spinner);
@@ -110,10 +110,10 @@ $tableParams = array(
             overlay.append('\
                 <div class="zdb-row zdb-toolbar-detail-header">\
                     <div class="zdb-col-4">\
-                        <h1><a href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'zrayExtension:unirest/unirestApiTable\')">' + requestHeadline + '</a> <span style="font-size: 14px;color: #006F9D;">&raquo ' + shortFileName + '</span></h1>\
+                        <h1><a href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'zrayExtension:Requests/unirestApiTable\')">' + requestHeadline + '</a> <span style="font-size: 14px;color: #006F9D;">&raquo ' + shortFileName + '</span></h1>\
                         <div class="zdb-pull-right">\
                             <ul class="zdb-toolbar-items zdb-horizontal">\
-                                <li><a class="zdb-backtrace-back" href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'zrayExtension:unirest/unirestApiTable\')">back</a></li>\
+                                <li><a class="zdb-backtrace-back" href="javascript:void(0);" onclick="zendDevBar.removeModuleOverlay(\'zrayExtension:Requests/unirestApiTable\')">back</a></li>\
                                 <li><div class="zdb-export-results-btn zdb-export-backtrace-btn" title="Export backtrace"></div></li>\
                             </ul>\
                         </div>\

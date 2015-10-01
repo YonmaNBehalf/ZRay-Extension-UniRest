@@ -1,6 +1,6 @@
 <?php
 
-$zre = new ZRayExtension('unirest');
+$zre = new ZRayExtension('Requests');
 
 $zre->setEnabledAfter('Unirest::request');
 
@@ -20,7 +20,7 @@ $zre->traceFunction('Unirest::request', function($context, &$storage){}, functio
 		$resultCode = $result->code;
 	}
 
-    $storage['Requests'][] = array(
+    $storage['UniRest'][] = array(
 		'method' => $context['functionArgs'][0],
 		'url' => $context['functionArgs'][1],
 		'requestHeaders' => $context['functionArgs'][3],
